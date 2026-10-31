@@ -53,6 +53,15 @@
 
 本插件使用 DSH 原生插件机制，在 `package.json` 中通过 `dsh.bundle.patch` 声明 profile 补丁。
 
+### 从 npm 安装（推荐）
+
+```sh
+dsh plugin --profile my-profile add dsh-tokeneconomizer
+dsh --profile my-profile
+```
+
+npm 页面：[dsh-tokeneconomizer](https://www.npmjs.com/package/dsh-tokeneconomizer)。将 `my-profile` 替换为实际使用的 profile；如需固定版本，可使用 `dsh-tokeneconomizer@0.1.0`。
+
 ### 从 GitHub Release 安装
 
 从 [v0.1.0 Release](https://github.com/lksa09871234/dsh-tokeneconomizer/releases/tag/v0.1.0) 下载 `dsh-tokeneconomizer-0.1.0.tgz`，将路径替换为实际下载位置：
@@ -81,7 +90,7 @@ dsh --profile my-profile
 
 `dsh plugin add` 在指定 profile 内通过 pnpm 安装，并将插件加入 `<DSH_HOME>/profiles/<profile>/package.json` 的 `dsh.profile.bundles`。
 
-插件**尚未发布到 npm**，目前请使用 GitHub Release 或源码安装。
+GitHub Release 和源码安装仍然可用，不依赖 npm 安装方式。
 
 ### 使用隔离的测试环境
 

@@ -75,6 +75,19 @@ Only the verification described above is claimed. See
 
 ## Install
 
+### From npm (recommended)
+
+```sh
+dsh plugin --profile my-profile add dsh-tokeneconomizer
+dsh --profile my-profile
+```
+
+Package: [dsh-tokeneconomizer on npm](https://www.npmjs.com/package/dsh-tokeneconomizer).
+Replace `my-profile` with the profile you actually use. For a pinned install,
+use `dsh-tokeneconomizer@0.1.0`.
+
+### From GitHub
+
 The plugin follows DSH's native plugin mechanism: a package with a
 `dsh.bundle.patch` entry that inserts one Cordis row into a profile. Install it
 into a profile (use a test profile first if you want to keep your daily profile
@@ -85,8 +98,6 @@ untouched):
 git clone https://github.com/lksa09871234/dsh-tokeneconomizer.git
 dsh plugin --profile my-profile add "$PWD/dsh-tokeneconomizer"
 
-# or, once published to npm
-dsh plugin --profile my-profile add dsh-tokeneconomizer
 ```
 
 `dsh plugin add` forwards to `pnpm` inside the profile and records the plugin in
