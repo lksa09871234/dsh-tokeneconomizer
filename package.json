@@ -1,0 +1,98 @@
+{
+  "name": "dsh-tokeneconomizer",
+  "version": "0.1.0",
+  "description": "DeepSeek Harness (DSH) plugin porting Microsoft TokenEconomizer's micro-skills, tool pruning, loop guard and usage ledger to DSH.",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "tokeneconomizer",
+    "token-economy",
+    "micro-skills",
+    "tool-pruning",
+    "loop-guard"
+  ],
+  "license": "Apache-2.0",
+  "author": "dsh-tokeneconomizer contributors",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "dsh-tokeneconomizer": "./bin/te.js",
+    "te": "./bin/te.js"
+  },
+  "files": [
+    "lib",
+    "bin",
+    "cordis.patch.yml",
+    "config",
+    "docs/ARCHITECTURE.md",
+    "docs/PORTING.md",
+    "docs/VERIFICATION.md",
+    "docs/MEASUREMENT.md",
+    "docs/UPSTREAM.md",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "engines": {
+    "node": ">=24.0.0",
+    "dsh": "^0.2.1-rc.2"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.4",
+    "@deepseek-ai/dsh": "^0.2.1-rc.2",
+    "@deepseek-ai/dsh-llm": "^0.2.1-rc.2",
+    "@deepseek-ai/schemastery": "~3.18.5"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-llm": {
+      "optional": true
+    },
+    "@deepseek-ai/schemastery": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.5",
+    "@deepseek-ai/dsh-agent": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-agent-loop": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-commands": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-llm": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-scope": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-session": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-session-projection": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-system-prompt": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-token-meter": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-tools": "0.2.1-rc.2",
+    "@deepseek-ai/schemastery": "3.18.5",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  },
+  "scripts": {
+    "test": "node --test --test-isolation=none \"test/unit/**/*.test.js\"",
+    "test:integration": "node --test --test-isolation=none \"test/integration/**/*.test.js\"",
+    "test:all": "node --test --test-isolation=none \"test/unit/**/*.test.js\" \"test/integration/**/*.test.js\"",
+    "typecheck": "tsc -p jsconfig.json",
+    "pack:check": "node scripts/pack-check.mjs",
+    "pack:smoke": "node scripts/pack-smoke.mjs",
+    "verify": "npm run typecheck && npm run test && npm run test:integration && npm run pack:check && npm run pack:smoke"
+  }
+}

@@ -1,0 +1,97 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify (node 24, DSH rc.2 dev packages)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Type check (JS + JSDoc)
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm test
+      - name: Offline integration tests (in-process real DSH packages)
+        run: npm run test:integration
+      - name: Packaging checks
+        run: npm run pack:check
+      - name: Packaging smoke test (packed tarball CLI)
+        run: npm run pack:smoke
+
+  verify-dsh-rc3:
+    name: verify against DSH rc.3 packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Point the dev/test DSH packages at 0.2.1-rc.3
+        run: |
+          npm install --no-save --no-audit --no-fund \
+            @deepseek-ai/cordis@4.0.5 \
+            @deepseek-ai/dsh-agent@0.2.1-rc.3 \
+            @deepseek-ai/dsh-agent-loop@0.2.1-rc.3 \
+            @deepseek-ai/dsh-commands@0.2.1-rc.3 \
+            @deepseek-ai/dsh-llm@0.2.1-rc.3 \
+            @deepseek-ai/dsh-scope@0.2.1-rc.3 \
+            @deepseek-ai/dsh-session@0.2.1-rc.3 \
+            @deepseek-ai/dsh-session-projection@0.2.1-rc.3 \
+            @deepseek-ai/dsh-system-prompt@0.2.1-rc.3 \
+            @deepseek-ai/dsh-token-meter@0.2.1-rc.3 \
+            @deepseek-ai/dsh-tools@0.2.1-rc.3 \
+            @deepseek-ai/schemastery@3.18.5
+      - name: Integration tests against rc.3
+        run: npm run test:integration
+
+  package:
+    name: package artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Pack the plugin (npm pack)
+        run: npm pack --pack-destination ./dist
+      - name: Verify the tarball contents
+        run: |
+          node -e "
+            const { execFileSync } = require('node:child_process');
+            const tar = require('node:fs').readdirSync('dist').find((f) => f.endsWith('.tgz'));
+            if (!tar) { console.error('no tarball produced'); process.exit(1); }
+            const list = execFileSync('tar', ['-tzf', 'dist/' + tar], { encoding: 'utf8' });
+            for (const required of ['package/lib/index.js', 'package/cordis.patch.yml', 'package/LICENSE', 'package/NOTICE', 'package/bin/te.js']) {
+              if (!list.includes(required)) { console.error('missing ' + required); process.exit(1); }
+            }
+            console.log('tarball ok: dist/' + tar);
+          "
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dsh-tokeneconomizer-tarball
+          path: dist/*.tgz
+          if-no-files-found: error

@@ -1,0 +1,19 @@
+# dsh-tokeneconomizer bundle patch.
+#
+# A profile adds this package to its `dsh.profile.bundles` list (or `dsh plugin
+# --profile <name> add` does that for you). The loader applies this patch as one
+# bundle layer; the row below mounts the plugin.
+#
+# All configuration fields are optional: omitted fields use the defaults
+# documented in README.md. `TE_*` environment variables override them per
+# process. Keep this file free of machine-specific paths.
+- insert:
+    - id: tokeneconomizer
+      name: dsh-tokeneconomizer
+      config:
+        # off | envfacts | on
+        microskills: off
+        # off | propose | apply
+        toolprune: propose
+        # off | on
+        loopguard: on

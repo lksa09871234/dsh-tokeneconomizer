@@ -1,0 +1,29 @@
+{
+  "name": "te-integration-driver",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Offline integration-test driver: waits for the dsh-tokeneconomizer load marker, records the result, and exits the booted DSH process.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": "^22.19 || >=24",
+    "dsh": "^0.2.1-rc.2"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.4",
+    "@deepseek-ai/dsh": "^0.2.1-rc.2"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": { "optional": true },
+    "@deepseek-ai/dsh": { "optional": true }
+  }
+}

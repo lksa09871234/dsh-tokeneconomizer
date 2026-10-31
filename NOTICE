@@ -1,0 +1,23 @@
+dsh-tokeneconomizer
+Copyright 2026 dsh-tokeneconomizer contributors
+
+This product is a DeepSeek Harness (DSH) port of TokenEconomizer:
+  Project: https://github.com/microsoft/TokenEconomizer
+  Commit:  e428fc91b0f8ffecb5a596d56b14fe2f1485a5f9 (2026-10-30)
+  Paper:   https://arxiv.org/abs/2610.22732
+  License: Apache License 2.0
+
+The micro-skills, tool-pruning, failure-loop-intervention, usage-ledger and
+pricing designs in this project are derived from TokenEconomizer. The DSH
+adaptation layer (Cordis plugin entry, event hooks, slash commands, config,
+state storage, packaging) is new work. See docs/UPSTREAM.md for the per-module
+derivation map and the list of upstream components that are not ported.
+
+TokenEconomizer is Copyright (c) Microsoft Corporation and the TokenEconomizer
+authors and is licensed under the Apache License, Version 2.0. A copy of that
+license is included as LICENSE.
+
+This project is not an official Microsoft product and is not affiliated with,
+sponsored by, or endorsed by Microsoft. The names "TokenEconomizer",
+"Microsoft", and the names of the upstream authors are used only to identify
+the upstream project and to satisfy attribution requirements.

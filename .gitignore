@@ -1,0 +1,49 @@
+# Dependencies and package-manager artifacts
+node_modules/
+.npm-cache/
+.pnpm-store/
+package-lock.json.bak
+*.tgz
+
+# Build, test and coverage output
+coverage/
+dist/
+.tmp/
+tmp/
+*.log
+.tsbuildinfo
+
+# Local verification environments (isolated DSH_HOME profiles)
+.dsh-test-home/
+.dsh-home/
+.dsh-tarball-home/
+.dsh-e2e-home/
+test/.dsh-home/
+.scratch-state/
+
+# Plugin runtime state if a user points dataDir inside this checkout
+.tokeneconomizer/
+te-state/
+
+# Secrets and personal configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials*
+secrets*
+.dsh/
+**/.dsh/credentials*
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+
+# Local scratch space
+.tmp-load/

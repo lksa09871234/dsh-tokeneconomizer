@@ -1,0 +1,9 @@
+# Keep line endings stable across platforms, and mark binary assets.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.zip binary
+*.tgz binary

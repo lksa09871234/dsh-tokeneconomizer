@@ -1,0 +1,5 @@
+- insert:
+    - id: te-integration-driver
+      name: te-integration-driver
+      config:
+        marker: from-driver-bundle

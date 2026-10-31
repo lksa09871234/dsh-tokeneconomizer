@@ -1,0 +1,39 @@
+# Example profile patch for dsh-tokeneconomizer
+#
+# Copy the settings you need into your profile's `cordis.patch.yml`
+# (for example `<DSH_HOME>/profiles/<profile>/cordis.patch.yml`) and remove
+# the `insert:` block if `dsh plugin --profile <profile> add ...` already added
+# the bundle row. Values shown are the plugin defaults.
+- insert:
+    - id: tokeneconomizer
+      name: dsh-tokeneconomizer
+      config:
+        # Whole-plugin switch. `TE_DISABLE=1` also disables it per process.
+        enabled: true
+        # Absolute state directory. Leave empty for <DSH_HOME>/tokeneconomizer.
+        dataDir: ''
+        # off | envfacts | on    (on adds the optional model-assisted proposer)
+        microskills: off
+        # off | propose | apply
+        toolprune: propose
+        # off | on              (on = redirects only; never stops a turn)
+        loopguard: on
+        microskillsProposeEvery: 3
+        microskillsMaxChars: 600
+        microskillsMaxFacts: 4
+        toolpruneEvidence: 10
+        toolpruneMinSessions: 2
+        toolpruneSessions: 5
+        toolpruneQuietMinutes: 60
+        # Extra tool names that must never be pruned.
+        protectedTools: []
+        loopguardEnvelopeMinSamples: 5
+        loopguardJudgeConfidence: 0.7
+        loopguardNudges: 1
+        loopguardBackstopMultiplier: 2.5
+        loopguardJudgeMinIntervalMs: 120000
+        loopguardJudge: true
+        usageRecord: true
+        diagnosticsRecord: true
+        diagnostics: redacted
+        diagnosticsMaxBytes: 65536
