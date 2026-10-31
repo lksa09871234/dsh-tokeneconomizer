@@ -1,5 +1,7 @@
 # dsh-tokeneconomizer
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 DeepSeek Harness (DSH) plugin that ports [Microsoft
 TokenEconomizer](https://github.com/microsoft/TokenEconomizer) to DSH: learn
 reliable project knowledge from earlier sessions, prune tool definitions the
@@ -68,7 +70,8 @@ Only the verification described above is claimed. See
   mechanisms are reimplemented in JavaScript in this repository.
 - No API key of its own: optional model calls use the session's existing DSH
   model route and account, so they appear in your normal usage.
-- No network calls, telemetry, or external services.
+- No separate network service or telemetry. Optional learning and judge calls
+  use the current DSH model route and may consume model quota.
 
 ## Install
 
@@ -78,7 +81,7 @@ into a profile (use a test profile first if you want to keep your daily profile
 untouched):
 
 ```sh
-# from a local checkout (replace the URL with the repository you publish)
+# from a local checkout
 git clone https://github.com/lksa09871234/dsh-tokeneconomizer.git
 dsh plugin --profile my-profile add "$PWD/dsh-tokeneconomizer"
 
@@ -177,9 +180,11 @@ process.
 | `usageRecord` | `true` | Record actual usage the harness reports. |
 | `diagnosticsRecord` | `true` | Write redacted diagnostics instead of throwing. |
 
-Environment overrides use `TE_` plus the upper-cased setting name, for example
+Environment overrides include
 `TE_MICROSKILLS=on`, `TE_TOOLPRUNE=apply`, `TE_LOOPGUARD=off`,
 `TE_DISABLE=1`.
+Multi-word settings use explicit underscored names, such as
+`TE_MICROSKILLS_PROPOSE_EVERY`; see `lib/config.js` for the full mapping.
 
 ## Update
 
@@ -199,7 +204,7 @@ dsh plugin --profile my-profile remove dsh-tokeneconomizer
 Remove the plugin's state only if you want to forget what it learned:
 
 ```sh
-node bin/te.js reset --project-only   # this project
+node bin/te.js --cwd /absolute/path/to/project reset --yes
 # or delete <DSH_HOME>/tokeneconomizer for every project
 ```
 
@@ -240,7 +245,7 @@ state directory (and optionally the profile's `package.json`, which
   configured number of well-behaved turns in that project, so a fresh project
   is never interrupted.
 - **Windows/macOS/Linux**: logic is platform-neutral and uses `node:path`; the
-  interactive TUI flows were verified on Windows only. CI covers the offline
+  interactive TUI flows have not been verified on any platform. CI covers the offline
   test suite on Linux.
 
 ## Documentation
