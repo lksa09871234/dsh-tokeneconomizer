@@ -55,7 +55,7 @@ sessions (no paid credential / TTY in automation). Steps and pass criteria are i
 ## Install
 
 ```sh
-git clone <this-repository> dsh-tokeneconomizer
+git clone https://github.com/lksa09871234/dsh-tokeneconomizer.git dsh-tokeneconomizer
 dsh plugin --profile my-profile add "$PWD/dsh-tokeneconomizer"
 dsh --profile my-profile
 ```

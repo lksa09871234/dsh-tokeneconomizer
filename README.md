@@ -18,35 +18,35 @@ the agent. This plugin brings the same four mechanisms to DSH:
 
 | Mechanism | What it does here |
 | --- | --- |
-| **Micro-skills** | Learns durable project facts from repeated failure?’success patterns across sessions and injects a short, capped, clearly-marked note at session start. Optional model-assisted proposal is off by default. |
+| **Micro-skills** | Learns durable project facts from repeated failure -> success patterns across sessions and injects a short, capped, clearly-marked note at session start. Optional model-assisted proposal is off by default. |
 | **Tool pruning** | Counts prompts where a loaded tool was never used across sessions and proposes hiding it. Default is *propose only*; `toolprune: apply` removes the tool definitions from this project's model requests through DSH's own per-agent tool restriction. |
 | **Loop guard** | Detects repeated identical failures, edit churn and no-progress turns. It never stops a turn; it injects at most a limited number of redirect messages and then only records/reports. Optional model judge is rate-limited and off if you disable it. |
 | **Usage ledger** | Records the harness-reported token categories (uncached input, cache read, cache write, output) and the plugin's own model-call overhead. It never invents prices, currency, or savings percentages. |
 
 ## Feature status
 
-Legend: **??tested** = covered by passing offline unit tests; **?Ÿ¡ verified**
+Legend: **tested** = covered by passing offline unit tests; **verified**
 = exercised end-to-end through real DSH code paths in the offline integration
 harness (`test/integration/`, real DSH packages, fake model adapter, no paid
-calls); **??manual/real-model** = needs a real DSH session with your model
+calls); **manual/real-model** = needs a real DSH session with your model
 account, steps documented in [docs/VERIFICATION.md](docs/VERIFICATION.md).
 
 | Feature | State | Notes |
 | --- | --- | --- |
-| Plugin loads in a real DSH profile | ?Ÿ¡ verified | Tarball/link install with `dsh plugin add` into an isolated `DSH_HOME`; composition asserted and a real `dsh` boot writes the plugin's load marker. |
-| Micro-skills: env-fact families + lifecycle | ??tested | Upstream thresholds ported; contradictions retire facts; cross-project state is keyed by session `cwd`. |
-| Micro-skills: injection into the model context | ?Ÿ¡ verified | Injected as an agent-scoped system-prompt section; the integration test reads the first fake request's system prompt and finds the delimited note. |
-| Micro-skills: model-assisted proposal | ?Ÿ¡ verified (plumbing), ??real model | Off by default; the digest/prompt/admission path is unit-tested with a fake side call, and its usage is recorded as plugin overhead. Needs a real model account to judge proposal quality. |
-| Tool pruning: evidence + proposal | ??tested | p=10 unused prompts over ?? sessions, or ?? sessions regardless of length; no proposal on insufficient evidence. |
-| Tool pruning: applying | ?Ÿ¡ verified | Deny list applied as an agent-scoped `ctx.tools.restrict`; the integration test proves the tool is gone from the dispatched request and from the durable `request/header` while the global registry keeps it. |
-| Tool pruning: restore / protected list | ?Ÿ¡ verified | Restored tools are never re-proposed; protected tools are never denied. |
-| Loop guard: detection rules + envelope | ??tested | Same thresholds, presets and decision order as upstream; ported upstream test cases pass. |
-| Loop guard: mid-turn redirect delivery | ?Ÿ¡ verified | Integration test scripts a repetitive failing turn: exactly one steering message, then a still-stuck notice, and the turn completes (never cancelled). |
-| Loop guard: user-visible "still stuck" notice | ??manual/real-model | DSH exposes no plugin?’user toast in the headless path; the notice is recorded and logged. See limitations. |
-| Usage ledger: actual tokens | ?Ÿ¡ verified | Integration test asserts the ledger record's token categories equal the fake provider's usage; missing data stays unknown. |
-| Usage ledger: plugin overhead | ?Ÿ¡ verified | Recorded for optional model calls; zero when those features are off. |
-| Commands (slash command + `te` CLI) | ?Ÿ¡ verified (registry + CLI), ??TUI/Web | Integration test executes `/tokeneconomizer status` and `restore` through the real command registry; the `te` CLI is exercised from the packed npm tarball by `npm run pack:smoke`. Interactive TUI rendering and the Web command UI are manual/unverified. |
-| Windows / macOS / Linux | ?Ÿ¡ partial | Local verification: Windows 11, Node 24. Paths are `node:path` based; POSIX is untested locally (CI runs the offline suite on Linux). |
+| Plugin loads in a real DSH profile | verified | Tarball/link install with `dsh plugin add` into an isolated `DSH_HOME`; composition asserted and a real `dsh` boot writes the plugin's load marker. |
+| Micro-skills: env-fact families + lifecycle | tested | Upstream thresholds ported; contradictions retire facts; cross-project state is keyed by session `cwd`. |
+| Micro-skills: injection into the model context | verified | Injected as an agent-scoped system-prompt section; the integration test reads the first fake request's system prompt and finds the delimited note. |
+| Micro-skills: model-assisted proposal | verified (plumbing), real model | Off by default; the digest/prompt/admission path is unit-tested with a fake side call, and its usage is recorded as plugin overhead. Needs a real model account to judge proposal quality. |
+| Tool pruning: evidence + proposal | tested | p=10 unused prompts over at least 2 sessions, or at least 5 sessions regardless of length; no proposal on insufficient evidence. |
+| Tool pruning: applying | verified | Deny list applied as an agent-scoped `ctx.tools.restrict`; the integration test proves the tool is gone from the dispatched request and from the durable `request/header` while the global registry keeps it. |
+| Tool pruning: restore / protected list | verified | Restored tools are never re-proposed; protected tools are never denied. |
+| Loop guard: detection rules + envelope | tested | Same thresholds, presets and decision order as upstream; ported upstream test cases pass. |
+| Loop guard: mid-turn redirect delivery | verified | Integration test scripts a repetitive failing turn: exactly one steering message, then a still-stuck notice, and the turn completes (never cancelled). |
+| Loop guard: user-visible "still stuck" notice | manual/real-model | DSH exposes no plugin -> user toast in the headless path; the notice is recorded and logged. See limitations. |
+| Usage ledger: actual tokens | verified | Integration test asserts the ledger record's token categories equal the fake provider's usage; missing data stays unknown. |
+| Usage ledger: plugin overhead | verified | Recorded for optional model calls; zero when those features are off. |
+| Commands (slash command + `te` CLI) | verified (registry + CLI), TUI/Web | Integration test executes `/tokeneconomizer status` and `restore` through the real command registry; the `te` CLI is exercised from the packed npm tarball by `npm run pack:smoke`. Interactive TUI rendering and the Web command UI are manual/unverified. |
+| Windows / macOS / Linux | partial | Local verification: Windows 11, Node 24. Paths are `node:path` based; POSIX is untested locally (CI runs the offline suite on Linux). |
 
 Offline evidence for this release: **343 unit tests** and **10 integration
 tests** pass, JSDoc type checking is clean, packaging checks and a packed-tarball
@@ -54,7 +54,7 @@ CLI smoke test pass (`npm run verify`); the integration suite mounts the real DS
 0.2.1 packages and drives real agent turns with a scripted model adapter, so no
 model credential is needed. See [docs/VERIFICATION.md](docs/VERIFICATION.md).
 
-Anything not marked ???Ÿ¡ is intentionally not claimed. See
+Only the verification described above is claimed. See
 [Known limitations](#known-limitations).
 
 ## Prerequisites
@@ -79,7 +79,7 @@ untouched):
 
 ```sh
 # from a local checkout (replace the URL with the repository you publish)
-git clone https://github.com/<your-account>/dsh-tokeneconomizer.git
+git clone https://github.com/lksa09871234/dsh-tokeneconomizer.git
 dsh plugin --profile my-profile add "$PWD/dsh-tokeneconomizer"
 
 # or, once published to npm
@@ -218,7 +218,7 @@ state directory (and optionally the profile's `package.json`, which
   declarations from the model request; your permissions and approval policy are
   unchanged, and the tool can still be called by name if some other party emits
   a call (the harness answers `UNKNOWN_TOOL` when the definition is hidden).
-- **User-visible "still stuck" notice**: DSH does not expose a plugin?’user
+- **User-visible "still stuck" notice**: DSH does not expose a plugin -> user
   notification channel to this plugin in headless or command-less sessions. The
   guard records the notice in state and logs it; the model-facing redirect uses
   DSH steering. See [docs/VERIFICATION.md](docs/VERIFICATION.md) for the exact
@@ -245,18 +245,18 @@ state directory (and optionally the profile's `package.json`, which
 
 ## Documentation
 
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) ??modules and data flow.
-- [docs/PORTING.md](docs/PORTING.md) ??what was ported, what was rewritten, and
-  the upstream?’DSH mapping.
-- [docs/VERIFICATION.md](docs/VERIFICATION.md) ??how each claim was verified,
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)  - modules and data flow.
+- [docs/PORTING.md](docs/PORTING.md)  - what was ported, what was rewritten, and
+  the upstream -> DSH mapping.
+- [docs/VERIFICATION.md](docs/VERIFICATION.md)  - how each claim was verified,
   commands to reproduce, and what still needs a real model account.
-- [docs/MEASUREMENT.md](docs/MEASUREMENT.md) ??how to run a fair before/after
+- [docs/MEASUREMENT.md](docs/MEASUREMENT.md)  - how to run a fair before/after
   comparison of usage and completion quality without fabricated savings claims.
-- [docs/UPSTREAM.md](docs/UPSTREAM.md) ??upstream-derived specification (copied
+- [docs/UPSTREAM.md](docs/UPSTREAM.md)  - upstream-derived specification (copied
   from the porting research, kept for attribution and maintainers).
-- [SECURITY.md](SECURITY.md) ??data handling and vulnerability reporting.
-- [CONTRIBUTING.md](CONTRIBUTING.md) ??development, tests, packaging.
-- [CHANGELOG.md](CHANGELOG.md) ??release notes.
+- [SECURITY.md](SECURITY.md)  - data handling and vulnerability reporting.
+- [CONTRIBUTING.md](CONTRIBUTING.md)  - development, tests, packaging.
+- [CHANGELOG.md](CHANGELOG.md)  - release notes.
 
 ## Attribution and license
 
@@ -272,22 +272,17 @@ official Microsoft product and is not affiliated with or endorsed by Microsoft.
 
 This project is licensed under the Apache License 2.0.
 
-## Publishing this repository (maintainer steps)
+## Publishing (maintainers)
 
-The repository is release-ready but intentionally carries no remote, tag, npm
-publication, or GitHub Release. To publish it:
+1. Run `npm ci` and `npm run verify` from a clean checkout.
+2. Push `main` to https://github.com/lksa09871234/dsh-tokeneconomizer and wait for
+   all GitHub Actions jobs to pass.
+3. Create an annotated `v0.1.0` tag at the verified commit, then create a GitHub
+   Release using `RELEASE_NOTES-v0.1.0.md` as the body.
+4. Attach the tarball produced by `npm pack`; do not zip the working tree,
+   which can contain ignored dependencies and local test state.
+5. npm publication is a separate optional step. Run `npm run pack:smoke` before
+   `npm publish --access public` from the tag.
 
-1. Create the GitHub repository and push `main` (`git remote add origin <url>`,
-   `git push -u origin main`).
-2. Fill in the repository-specific fields that cannot be known here:
-   `package.json` ??`repository`, `homepage`, `bugs`, and (optional) `funding`;
-   replace `<your-account>` in the README clone URL above.
-3. Run the full verification from a clean clone: `npm ci && npm run verify`.
-4. Tag the release (`git tag -a v0.1.0 -m "v0.1.0"`) and use
-   `RELEASE_NOTES-v0.1.0.md` as the GitHub Release body.
-5. Optional npm publication: `npm publish --access public` from the tag.
-   The package is dependency-free at install time; verify the tarball first with
-   `npm run pack:smoke`.
-6. Do not build release archives by zipping the working tree: it may contain
-   gitignored state (`.dsh-test-home/`, `node_modules/`). Use `git archive` or
-   `npm pack`, both covered by the checks above.
+Real-model quality, savings and interactive TUI behavior still require the
+manual checks in `docs/VERIFICATION.md`. Do not infer them from offline CI.

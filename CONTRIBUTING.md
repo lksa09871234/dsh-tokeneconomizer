@@ -7,7 +7,7 @@ mechanism unless a divergence is documented in `docs/PORTING.md`.
 ## Development setup
 
 ```sh
-git clone <this-repository>
+git clone https://github.com/lksa09871234/dsh-tokeneconomizer.git
 cd dsh-tokeneconomizer
 npm ci
 npm run verify
